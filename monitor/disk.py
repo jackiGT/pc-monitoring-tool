@@ -5,7 +5,7 @@ import time
 io = psutil.disk_io_counters(perdisk=False)
 
 def DiskUsage():
-    print("Disk usage (%):", psutil.disk_usage('/').percent)
+    print("Disk drive usage (%):", psutil.disk_usage('/').percent)
 
 def monitorDiskActivity():
     starttime = time.monotonic()
