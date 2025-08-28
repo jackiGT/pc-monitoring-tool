@@ -1,0 +1,33 @@
+DEBUG: DEBUG
+INFO: INFO
+WARNING: Warning Message!
+ERROR: ERROR
+CRITICAL: CRITICAL ERROR
+ERROR: Exception Message
+Traceback (most recent call last):
+  File "c:\Users\jacki.JACKIGT\cs\code\Python\monitoringtool\monitor\logger.py", line 24, in main
+    1/0
+    ~^~
+ZeroDivisionError: division by zero
+DEBUG: DEBUG
+INFO: INFO
+WARNING: Warning Message!
+ERROR: ERROR
+CRITICAL: CRITICAL ERROR
+ERROR: Exception Message
+Traceback (most recent call last):
+  File "c:\Users\jacki.JACKIGT\cs\code\Python\monitoringtool\monitor\logger.py", line 22, in main
+    1/0
+    ~^~
+ZeroDivisionError: division by zero
+[DEBUG|logger|L17] 2025-08-26T17:17:10-0400: DEBUG
+[INFO|logger|L18] 2025-08-26T17:17:10-0400: INFO
+[WARNING|logger|L19] 2025-08-26T17:17:10-0400: Warning Message!
+[ERROR|logger|L20] 2025-08-26T17:17:10-0400: ERROR
+[CRITICAL|logger|L21] 2025-08-26T17:17:10-0400: CRITICAL ERROR
+[ERROR|logger|L25] 2025-08-26T17:17:10-0400: Exception Message
+Traceback (most recent call last):
+  File "c:\Users\jacki.JACKIGT\cs\code\Python\monitoringtool\monitor\logger.py", line 23, in main
+    1/0
+    ~^~
+ZeroDivisionError: division by zero
