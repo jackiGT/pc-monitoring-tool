@@ -1,14 +1,11 @@
 import psutil
 import time
-from base import Monitor
+from .base import Monitor
 
 # Instantaneous network speed per minute
 class network_Monitor(Monitor):
-    def __init__(self, name, interval, mode=None):
-        super().__init__(name, interval)
-        self.mode = mode
 
-    def monitorNetworkInstant(self):
+    def printNetworkInstant(self):
 
         #network sent and recieved (in KB)
         networkSentB = psutil.net_io_counters().bytes_sent
@@ -20,12 +17,11 @@ class network_Monitor(Monitor):
         netUploadSpeed = abs(networkSentB-networkSentA)
         netDownloadSpeed = abs(networkRecvB-networkRecvA)
 
-        # print every minute
         print("Instant Upload Speed (KB/s): ", round(netUploadSpeed/1024, 2))
         print("Instant Download Speed (KB/s): ", round(netDownloadSpeed/1024, 2))
 
     # Average network speed per minute
-    def monitorNetworkAvg(self):
+    def printNetworkAvg(self):
 
         starttime = time.monotonic()
 
@@ -49,28 +45,44 @@ class network_Monitor(Monitor):
         # print every minute
         print("Average Upload Speed (KB/s): ", round(avgUploadSpeed/1024, 2))
         print("Average Download Speed (KB/s): ", round(avgDownloadSpeed/1024, 2))
+    
+    def getNetworkDownload(self):
+        #network sent and recieved (in KB)
+        networkRecvB = psutil.net_io_counters().bytes_recv
+        time.sleep(1)
+        networkRecvA = psutil.net_io_counters().bytes_recv
 
-    def update(self, mode):
-        self.mode = mode
-        mode()
+        netDownloadSpeed = abs(networkRecvB-networkRecvA)
 
-    def start(self, mode):
-        self.running = True
-        self.status = "Active"
+        return round(netDownloadSpeed/1024, 2)
+    
+    def getNetworkUpload(self):
+        #network sent and recieved (in KB)
+        networkSentB = psutil.net_io_counters().bytes_sent
+        time.sleep(1)
+        networkSentA = psutil.net_io_counters().bytes_sent
 
-        interval = self.getInterval()
-        starttime = time.monotonic() # time information necessary!
 
-        while self.running:
-            self.update(mode)
-            sleepTime = max(0, interval - ((time.monotonic() - starttime) % interval))
-            time.sleep(sleepTime)
+        netUploadSpeed = abs(networkSentB-networkSentA)
+
+        return round(netUploadSpeed/1024, 2)
+
+    def getInstant(self):
+        #network sent and recieved (in KB)
+        networkSentB = psutil.net_io_counters().bytes_sent
+        time.sleep(1)
+        networkSentA = psutil.net_io_counters().bytes_sent
+
+
+        netUploadSpeed = abs(networkSentB-networkSentA)
+
+        return "Instant Upload Speed (KB/s): " + str(round(netUploadSpeed/1024, 2))   
+
 
 
 #Testing main
 def main():
     netmonitor = network_Monitor("NetworkMonitor1", 5)
-    netmonitor.start(netmonitor.monitorNetworkInstant)
 
 if __name__ == "__main__":
     main()

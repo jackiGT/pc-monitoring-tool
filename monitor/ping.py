@@ -1,6 +1,6 @@
 import psutil
 import time
-from base import Monitor
+from .base import Monitor
 import ping3
 import socket
 
@@ -26,7 +26,7 @@ def getRouterIP():
 # Monitors local and internet ping, prints out both pings every 5 seconds
 class ping_Monitor(Monitor):
     
-    def update(self, local):
+    def printInfo(self, local):
         ping = ping3.ping("8.8.8.8") #Google DNS
         pingLocal = ping3.ping(getRouterIP())
 
@@ -40,21 +40,21 @@ class ping_Monitor(Monitor):
                 print("Ping (ms): ", round((ping * 1000), 2))
             else:
                 print("Ping (ms): Timed out")
-        
+
         print("")
     
-    def start(self, local):
-        self.running = True
-        self.status = "Active"
+    def getInstant(self):
+        ping = ping3.ping("8.8.8.8") #Google DNS
+        return "Ping: " + str(round((ping * 1000), 2))
 
-        interval = self.getInterval()
-        starttime = time.monotonic() # time information necessary!
-
-        while self.running:
-            self.update(local)
-            sleepTime = max(0, interval - ((time.monotonic() - starttime) % interval))
-            time.sleep(sleepTime)
+    def getPing(self):
+        ping = ping3.ping("8.8.8.8") #Google DNS
+        return str(round((ping * 1000), 2))
     
+    def getLocalPing(self):
+        pingLocal = ping3.ping(getRouterIP())
+        return round((pingLocal * 1000), 2)
+
 
 
 #Testing mainQ  
