@@ -1,6 +1,10 @@
-import psutil
-import platform
+"""
+Author: Jackie Liu
+Date: 1/8/2026
+Desc: Disk monitor subclass, collections on disk drive, disk read/written.
+"""
 import time
+import psutil
 from .base import Monitor
 
 class disk_Monitor(Monitor):
@@ -8,13 +12,31 @@ class disk_Monitor(Monitor):
     def getDisk(self):
         return psutil.disk_usage('/').percent
 
-    def getInstantDiskRead(self):
+    def getTotalDiskRead(self):
         io = psutil.disk_io_counters(perdisk=False)
         return round(io.read_bytes/(1024 ** 2), 2)
     
-    def getInstantDiskWrite(self):
+    def getTotalDiskWrite(self):
         io = psutil.disk_io_counters(perdisk=False)
         return round(io.write_bytes/(1024 ** 2), 2)
+    
+    def getInstantDiskWrite(self):
+        interval = .2
+
+        before = psutil.disk_io_counters(perdisk=False).write_bytes
+        time.sleep(interval)
+        after = psutil.disk_io_counters(perdisk=False).write_bytes
+
+        return round(((after - before)/interval)/(1024 ** 2), 2)
+    
+    def getInstantDiskRead(self):
+        interval = .2
+
+        before = psutil.disk_io_counters(perdisk=False).read_bytes
+        time.sleep(interval)
+        after = psutil.disk_io_counters(perdisk=False).read_bytes
+
+        return round(((after - before)/interval)/(1024 ** 2), 2)
     
     def printInfo(self):
         io = psutil.disk_io_counters(perdisk=False)
@@ -24,10 +46,10 @@ class disk_Monitor(Monitor):
 
 
 #Testing mainQ  
-def main():
-    diskmonitor = disk_Monitor("diskMonitor", 5)
-    print("Disk Drive Percentage: " + str(diskmonitor.getDisk()))
-    diskmonitor.start()
-
 if __name__ == "__main__":
-    main()
+    interval = .2
+
+    before = psutil.disk_io_counters(perdisk=False).write_bytes
+    time.sleep(interval)
+    after = psutil.disk_io_counters(perdisk=False).write_bytes
+    print(round(((after - before)/interval)/(1024 ** 2), 2))

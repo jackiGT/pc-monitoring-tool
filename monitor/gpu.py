@@ -1,6 +1,12 @@
+"""
+Author: Jackie Liu
+Date: 1/8/2026
+Desc: GPU monitor subclass, 
+      specifically for NVIDIA GPUs (GPUtil).
+Note: Can only be used for NVIDIA GPUs.
+"""
+
 import GPUtil
-import platform
-import time
 from .base import Monitor
 
 class GPU_Monitor(Monitor):
@@ -41,7 +47,7 @@ class GPU_Monitor(Monitor):
 
             gpu_id = gpu.id
 
-            gpu_load = gpu.memoryFree
+            gpu_load = gpu.load*100
 
             gpu_free_mem = gpu.memoryFree
             gpu_used_mem = gpu.memoryUsed

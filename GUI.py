@@ -1,3 +1,9 @@
+"""
+Author: Jackie Liu
+Date: 1/8/2026
+Desc: Implements a basic python GUI using monitor subclasses to directly get data from PC
+"""
+
 import tkinter
 from tkinter import scrolledtext
 from monitor import *

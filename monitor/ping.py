@@ -1,5 +1,10 @@
+"""
+Author: Jackie Liu
+Date: 1/8/2026
+Desc: Ping monitor subclass, collections on local/remote ping.
+"""
+
 import psutil
-import time
 from .base import Monitor
 import ping3
 import socket
@@ -49,7 +54,7 @@ class ping_Monitor(Monitor):
 
     def getPing(self):
         ping = ping3.ping("8.8.8.8") #Google DNS
-        return str(round((ping * 1000), 2))
+        return round((ping * 1000), 2)
     
     def getLocalPing(self):
         pingLocal = ping3.ping(getRouterIP())

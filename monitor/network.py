@@ -1,3 +1,9 @@
+"""
+Author: Jackie Liu
+Date: 1/8/2026
+Desc: Network monitor subclass, collections on network download/upload speed.
+"""
+
 import psutil
 import time
 from .base import Monitor

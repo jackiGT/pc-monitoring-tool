@@ -1,6 +1,10 @@
+"""
+Author: Jackie Liu
+Date: 1/8/2026
+Desc: CPU monitor subclass, collections on CPU usage, # cores/logical cores.
+"""
+
 import psutil
-import platform
-import time
 from .base import Monitor
 
 class CPU_Monitor(Monitor):
@@ -11,13 +15,9 @@ class CPU_Monitor(Monitor):
     def getInstantCPUPercent(self):
         return psutil.cpu_percent(interval=1)
     
-    def getInstant(self):
-        return str(psutil.cpu_percent(interval=0))
-    
     def printInfo(self):
-        print("Cores (#): " + psutil.cpu_count(logical=True))
-        print("CPU (%): " + psutil.cpu_percent(interval=1))
-        print("CPU (MB): " + psutil.cpu_percent(interval=1))
+        print("Cores (#): " + str(psutil.cpu_count(logical=True)))
+        print("CPU (%): " + str(psutil.cpu_percent(interval=1)))
 
 #Testing mainQ  
 def main():

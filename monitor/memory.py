@@ -1,13 +1,17 @@
+"""
+Author: Jackie Liu
+Date: 1/8/2026
+Desc: RAM monitor subclass, collections on ram usage.
+"""
+
 import psutil
-import platform
-import time
 from .base import Monitor
 
 class RAM_Monitor(Monitor):
 
     def getRAMPercent(self):
         ram = psutil.virtual_memory()
-        return str(ram.percent)
+        return ram.percent
 
     def getRAM(self):
         ram = psutil.virtual_memory()

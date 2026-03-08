@@ -1,7 +1,14 @@
+"""
+Author: Jackie Liu
+Date: 1/8/2026
+Desc: Base monitor class, returns information on a given interval 
+      depending on registered function metric, monitor subclass.
+"""
+
 import time
 import threading
 
-class Monitor(object): # Base Monitor to oversee specific aspects
+class Monitor(object):
     def __init__(self, name, interval):
         self.name = name
         self.interval = interval
@@ -14,10 +21,11 @@ class Monitor(object): # Base Monitor to oversee specific aspects
         self.data = {}
         self.metrics = []
 
-        self.lock = threading.Lock
+        self.lock = threading.Lock()
 
     def getData(self):
-        return self.data
+        with self.lock:
+            return self.data.copy()
     
     def getStatus(self):
         return self.status
