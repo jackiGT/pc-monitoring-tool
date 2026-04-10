@@ -49,6 +49,7 @@ class Agent():
         self.ping.register("local ping (ms)", self.ping.getLocalPing)
 
         # setting up thread objects for all monitors & set them all to daemons
+        # daemon thread makes it not block program exiting
         self.gpuThread = threading.Thread(target=self.gpu.start, daemon=True)
         self.cpuThread = threading.Thread(target=self.cpu.start, daemon=True)
         self.diskThread = threading.Thread(target=self.disk.start, daemon=True)
@@ -81,9 +82,9 @@ class Agent():
         try:
             while True:
                 payload = self.collect()
-                r = requests.post('http://127.0.0.1:5000/monitor/data', json=payload) #prints it for now
-                print(r.status_code)
-                #print(json.dumps(payload, indent=4))
+                #r = requests.post('http://127.0.0.1:8000/api/data', json=payload) #prints it for now
+                #print(r.status_code)
+                print(json.dumps(payload, indent=4))
                 time.sleep(self.interval)
         except KeyboardInterrupt: #ctrl + c
             print("Shutdown intiated.")

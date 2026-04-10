@@ -35,6 +35,7 @@ class network_Monitor(Monitor):
         networkSentB = psutil.net_io_counters().bytes_sent
         networkRecvB = psutil.net_io_counters().bytes_recv
 
+        # wait between interval
         sleepTime = max(0, self.getInterval() - ((time.monotonic() - starttime) % self.getInterval()))
         time.sleep(sleepTime)
 
@@ -52,6 +53,7 @@ class network_Monitor(Monitor):
         print("Average Upload Speed (KB/s): ", round(avgUploadSpeed/1024, 2))
         print("Average Download Speed (KB/s): ", round(avgDownloadSpeed/1024, 2))
     
+    # Network download speed
     def getNetworkDownload(self):
         #network sent and recieved (in KB)
         networkRecvB = psutil.net_io_counters().bytes_recv
@@ -62,6 +64,7 @@ class network_Monitor(Monitor):
 
         return round(netDownloadSpeed/1024, 2)
     
+    # Network upload speed
     def getNetworkUpload(self):
         #network sent and recieved (in KB)
         networkSentB = psutil.net_io_counters().bytes_sent

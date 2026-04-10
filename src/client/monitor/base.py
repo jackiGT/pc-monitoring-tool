@@ -21,6 +21,8 @@ class Monitor(object):
         self.data = {}
         self.metrics = []
 
+        # lock to prevent concurrent threads from accessing same source, unpredictability
+        # instance level lock so each monitor can run concurrently
         self.lock = threading.Lock()
 
     def getData(self):
@@ -68,6 +70,7 @@ class Monitor(object):
         while self.running:
             self.update()
 
+            # interval timer, higher accuracy with time.monotonic()
             elapsed = time.monotonic() - loopStart
             sleepTime = interval - (elapsed % interval)
             time.sleep(sleepTime)

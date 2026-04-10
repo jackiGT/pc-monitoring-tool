@@ -9,6 +9,7 @@ from .base import Monitor
 
 class CPU_Monitor(Monitor):
     
+    # Core count, not including or including logic cores
     def getCores(self, logic):
         return psutil.cpu_count(logical=logic)
     

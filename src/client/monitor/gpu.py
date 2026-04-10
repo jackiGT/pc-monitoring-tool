@@ -9,13 +9,15 @@ Note: Can only be used for NVIDIA GPUs.
 import GPUtil
 from .base import Monitor
 
+
 class GPU_Monitor(Monitor):
     def __init__(self, name, interval, data=None):
         super().__init__(name, interval)
 
-        try:
+        try: 
             self.gpus = GPUtil.getGPUs()
 
+        # Exception if no Nvidia GPUs detected
         except Exception:
             print("No NVIDIA driver found.")
             self.GPUCount = 0
@@ -24,10 +26,12 @@ class GPU_Monitor(Monitor):
         else:
             self.GPUCount = len(self.gpus)
     
+    # GPU static information - information not changing with time
     def getGPUStatic(self):
         dict_gpus = {}
         for gpu in self.gpus:
 
+            # Call each gpu instance variables to store the information
             gpu_id = gpu.id
             gpu_name = gpu.name
             gpu_uuid = gpu.uuid
@@ -39,6 +43,8 @@ class GPU_Monitor(Monitor):
                                        "UUID": gpu_uuid}})
         return dict_gpus
 
+
+     # GPU dynamic information - information changing with time
     def getGPUDynamic(self):
         gpus = GPUtil.getGPUs()
         dict_gpus = {}
@@ -60,6 +66,7 @@ class GPU_Monitor(Monitor):
                                        "temperature": gpu_temp}})
         return dict_gpus
     
+    # GPU information full view
     def viewGPUTotal(self):
         gpusStatic = self.getGPUStatic()
         gpusDynamic = self.getGPUDynamic()
