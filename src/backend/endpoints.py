@@ -37,7 +37,7 @@ class Disk(BaseModel):
 
 class Memory(BaseModel):
     usage_percent: float
-    usage: float
+    usage_bytes: float
 
 class Network(BaseModel):
     upload: float
@@ -64,7 +64,7 @@ class GpuID(BaseModel):
     dynamic: Dynamic
 
 class GPU(BaseModel): # Multiple GPUs possible
-    id: list[GpuID]
+    gpus: list[GpuID]
 
 class Payload(BaseModel):
     time: float
@@ -87,10 +87,11 @@ def home():
 @app.post("/api/data")
 async def recievePayload(payload: Payload, request: Request):
     payload = await request.json()
+    print("Safe!")
     if payload:
         return payload
     raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Payload not found")
 
 @app.get("/api/data")
-def getPayload():
+def readPayload():
     raise NotImplementedError

@@ -14,8 +14,8 @@ from monitor import *
 
 class Agent():
     def __init__(self, interval=60):
-        self.interval = interval
-        self.deviceId = socket.gethostname()
+        self.interval = interval # interval of agent payload sent 
+        self.deviceId = socket.gethostname() #grabs device ID of host
 
         # intializing all monitors for pc data
         self.gpu = GPU_Monitor("gpu", 5)
@@ -26,27 +26,26 @@ class Agent():
         self.ping = ping_Monitor("ping", 5)
 
         # static values go directly to data (no need for constant monitoring)
-        self.gpu.data["static"] = self.gpu.getGPUStatic()
         self.cpu.data["cores"] = self.cpu.getCores(False)
-        self.cpu.data["logical cores"] = self.cpu.getCores(True)
+        self.cpu.data["log_cores"] = self.cpu.getCores(True)
 
         # registering monitor functions (dynamic values)
-        self.gpu.register("dynamic", self.gpu.getGPUDynamic)
+        self.gpu.register("gpus", self.gpu.getGPUTotal)
 
-        self.cpu.register("CPU %", self.cpu.getInstantCPUPercent)
+        self.cpu.register("usage_percent", self.cpu.getInstantCPUPercent)
 
-        self.disk.register("disk read (MB)", self.disk.getInstantDiskRead)
-        self.disk.register("disk written (MB)", self.disk.getInstantDiskWrite)
-        self.disk.register("disk drive percent", self.disk.getDisk)
+        self.disk.register("read", self.disk.getInstantDiskRead)
+        self.disk.register("write", self.disk.getInstantDiskWrite)
+        self.disk.register("drive_percent", self.disk.getDisk)
 
-        self.memory.register("RAM usage %", self.memory.getRAMPercent)
-        self.memory.register("RAM usage (GB)", self.memory.getRAM)
+        self.memory.register("usage_percent", self.memory.getRAMPercent)
+        self.memory.register("usage_bytes", self.memory.getRAM)
 
-        self.network.register("upload speed (MB/s)", self.network.getNetworkUpload)
-        self.network.register("download speed (MB/s)", self.network.getNetworkDownload)
+        self.network.register("upload", self.network.getNetworkUpload)
+        self.network.register("download", self.network.getNetworkDownload)
 
-        self.ping.register("ping (ms)", self.ping.getPing)
-        self.ping.register("local ping (ms)", self.ping.getLocalPing)
+        self.ping.register("internet", self.ping.getPing)
+        self.ping.register("local", self.ping.getLocalPing)
 
         # setting up thread objects for all monitors & set them all to daemons
         # daemon thread makes it not block program exiting
@@ -60,8 +59,8 @@ class Agent():
     # collection of data and put into payload
     def collect(self):
         payload = {"time": time.time(), 
-                   "deviceID": self.deviceId, 
-                   "cpu": self.cpu.getData(), 
+                   "device_id": self.deviceId, 
+                   "cpu": self.cpu.getData(), #grabs data(dict) of each monitor 
                    "gpu": self.gpu.getData(), 
                    "disk": self.disk.getData(), 
                    "memory": self.memory.getData(), 
@@ -84,6 +83,7 @@ class Agent():
                 payload = self.collect()
                 #r = requests.post('http://127.0.0.1:8000/api/data', json=payload) #prints it for now
                 #print(r.status_code)
+                print(self.gpu.getData())
                 print(json.dumps(payload, indent=4))
                 time.sleep(self.interval)
         except KeyboardInterrupt: #ctrl + c

@@ -37,7 +37,7 @@ log_file = log_dir / "metrics.log"
 logging.basicConfig(
     filename=str(log_file),
     encoding="utf-8",
-    filemode="a", # append 
+    filemode="a", # append
     format="{asctime} - {levelname} - {message}",
     style="{",
     datefmt="%Y-%m-%d %H:%M",

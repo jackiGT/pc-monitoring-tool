@@ -28,7 +28,7 @@ class GPU_Monitor(Monitor):
     
     # GPU static information - information not changing with time
     def getGPUStatic(self):
-        dict_gpus = {}
+        gpus_list = []
         for gpu in self.gpus:
 
             # Call each gpu instance variables to store the information
@@ -38,20 +38,19 @@ class GPU_Monitor(Monitor):
 
             gpu_total_mem = gpu.memoryTotal
 
-            dict_gpus.update({gpu_id: {"name": gpu_name,
-                                       "total memory": gpu_total_mem,
-                                       "UUID": gpu_uuid}})
-        return dict_gpus
+            gpus_list.append({"id": gpu_id,
+                                "model": gpu_name,
+                                "total memory": gpu_total_mem,
+                                "UUID": gpu_uuid})
+        return gpus_list
 
 
      # GPU dynamic information - information changing with time
     def getGPUDynamic(self):
         gpus = GPUtil.getGPUs()
-        dict_gpus = {}
+        gpus_list = []
 
         for gpu in gpus:
-
-            gpu_id = gpu.id
 
             gpu_load = gpu.load*100
 
@@ -60,29 +59,29 @@ class GPU_Monitor(Monitor):
             
             gpu_temp = gpu.temperature
 
-            dict_gpus.update({gpu_id: {"usage percentage": gpu_load, 
+            gpus_list.append({"usage percentage": gpu_load, 
                                        "free memory": gpu_free_mem, 
                                        "used memory": gpu_used_mem, 
-                                       "temperature": gpu_temp}})
-        return dict_gpus
+                                       "temp": gpu_temp})
+        return gpus_list
     
     # GPU information full view
-    def viewGPUTotal(self):
+    def getGPUTotal(self):
         gpusStatic = self.getGPUStatic()
         gpusDynamic = self.getGPUDynamic()
-        dict_gpus = {}
+        gpu_info_static = []
+        gpu_info_dynamic = []
+        gpus_list = {}
 
         for id in gpusStatic:
 
-            gpu_id = id
-
-            gpu_name = id.get("name")
+            gpu_name = id.get("model")
             gpu_total_mem = id.get("total memory")
             gpu_uuid = id.get("UUID")
 
-            dict_gpus.update({gpu_id: {"name": gpu_name, 
+            gpu_info_static.append({"model": gpu_name, 
                                        "total memory": gpu_total_mem, 
-                                       "UUID": gpu_uuid}})
+                                       "UUID": gpu_uuid})
             
         for id in gpusDynamic:
             gpu_load = id.get("usage percentage")
@@ -90,11 +89,17 @@ class GPU_Monitor(Monitor):
             gpu_free_mem = id.get("free memory")
             gpu_used_mem = id.get("used memory")
             
-            gpu_temp = id.get("temperature")
+            gpu_temp = id.get("temp")
 
-            dict_gpus[id]["dynamic"] = {"usage percentage": gpu_load,
+            gpu_info_dynamic.append({"usage percentage": gpu_load,
                                         "free memory": gpu_free_mem, 
                                         "used memory": gpu_used_mem, 
-                                        "temperature": gpu_temp}
+                                        "temp": gpu_temp})
+            
+        for i in range(len(gpusStatic)):
+            gpus_list.update({"static": gpu_info_static[i], 
+                              "dynamic": gpu_info_dynamic[i]})
 
-        return dict_gpus
+        return [gpus_list]
+    
+

@@ -35,12 +35,14 @@ class Monitor(object):
     def getInterval(self):
         return self.interval
     
+    # registers function with name and the respective monitor function
     def register(self, name, func):
         self.metrics.append((name, func))
 
     def unregister(self, func):
         self.metrics.remove(func)
     
+    # executes functions in metrics list in order, dict {name: func() return}
     def update(self):
         with self.lock:
             for name, func in self.metrics:
@@ -62,6 +64,7 @@ class Monitor(object):
     def start(self):
         self.running = True
         self.status = "Active"
+        
 
         interval = self.getInterval()
         loopStart = time.monotonic() # time information necessary!
