@@ -80,7 +80,7 @@ class GPU_Monitor(Monitor):
             gpu_uuid = id.get("UUID")
 
             gpu_info_static.append({"model": gpu_name, 
-                                       "total memory": gpu_total_mem, 
+                                       "memory": gpu_total_mem, 
                                        "UUID": gpu_uuid})
             
         for id in gpusDynamic:
@@ -91,9 +91,9 @@ class GPU_Monitor(Monitor):
             
             gpu_temp = id.get("temp")
 
-            gpu_info_dynamic.append({"usage percentage": gpu_load,
-                                        "free memory": gpu_free_mem, 
-                                        "used memory": gpu_used_mem, 
+            gpu_info_dynamic.append({"usage_percent": gpu_load,
+                                        "free_mem": gpu_free_mem, 
+                                        "used_mem": gpu_used_mem, 
                                         "temp": gpu_temp})
             
         for i in range(len(gpusStatic)):
@@ -102,4 +102,13 @@ class GPU_Monitor(Monitor):
 
         return [gpus_list]
     
+# debugging for GPU monitor
+def main():
+    GPUMonitor = GPU_Monitor("gpuMonitor", 5)
+    print(GPUMonitor.getGPUTotal())
+    
+    #GPUMonitor.register("gpuTotal", GPUMonitor.getGPUTotal) 
+    #GPUMonitor.start()
 
+if __name__ == "__main__":
+    main()

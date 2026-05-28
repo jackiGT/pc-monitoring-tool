@@ -2,15 +2,17 @@
 Author: Jackie Liu
 Date: 4/10/2026
 Desc: Basic API endpoints, grabs information and sends to pointed locations
+
+    Note: fastapi dev *.py for running dev server (testing/debugging)
+          fastapi run -h for more info on running server
 """
-# Note: fastapi dev *.py for running dev server
 
 from fastapi import FastAPI, HTTPException, Request, status, Body
 from fastapi.responses import HTMLResponse
 from pydantic import BaseModel
 
 # instance of FastAPI class for active usage
-app = FastAPI()
+app = FastAPI(prefix="/api", title="Agent API", description="API for agent to send data to server", version="0.1.0")
 
 posts: list[dict] = [
     {"key": "val",
@@ -24,7 +26,13 @@ posts: list[dict] = [
     "dagger": "knife"}
 ]
 
-# Payload schemas to validate incoming json format and set guidelines
+# Testing
+@app.get("/", response_class=HTMLResponse, include_in_schema=False)
+@app.get("/test", response_class=HTMLResponse, include_in_schema=False)
+def home():
+    return f"<h1>{posts[0]['triangles']}</h1>"
+
+# Payload schemas to validate incoming json format (agent payload) and set guidelines
 class CPU(BaseModel):
     cores: int
     log_cores: int
@@ -76,22 +84,18 @@ class Payload(BaseModel):
     network: Network
     ping: Ping
 
-
-# Testing
-@app.get("/", response_class=HTMLResponse, include_in_schema=False)
-@app.get("/test", response_class=HTMLResponse, include_in_schema=False)
-def home():
-    return f"<h1>{posts[0]['triangles']}</h1>"
-
 # gets POST request payload when agent sends it to server
-@app.post("/api/data")
+@app.post("/data")
 async def recievePayload(payload: Payload, request: Request):
     payload = await request.json()
     print("Safe!")
     if payload:
+        print("Payload received successfully")
         return payload
     raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Payload not found")
 
+"""
 @app.get("/api/data")
 def readPayload():
     raise NotImplementedError
+"""

@@ -60,7 +60,7 @@ class Agent():
     def collect(self):
         payload = {"time": time.time(), 
                    "device_id": self.deviceId, 
-                   "cpu": self.cpu.getData(), #grabs data(dict) of each monitor 
+                   "cpu": self.cpu.getData(), # grabs data(dict) of each monitor 
                    "gpu": self.gpu.getData(), 
                    "disk": self.disk.getData(), 
                    "memory": self.memory.getData(), 
@@ -81,15 +81,14 @@ class Agent():
         try:
             while True:
                 payload = self.collect()
-                #r = requests.post('http://127.0.0.1:8000/api/data', json=payload) #prints it for now
-                #print(r.status_code)
-                print(self.gpu.getData())
-                print(json.dumps(payload, indent=4))
+                r = requests.post('http://127.0.0.1:8000/api/data', json=payload) #prints it for now
+                print(r.status_code)
+                # print(json.dumps(payload, indent=4))
                 time.sleep(self.interval)
         except KeyboardInterrupt: #ctrl + c
             print("Shutdown intiated.")
 
-        except Exception as e: #error catcher
+        except Exception as e: # error catcher
             print(f"Critical Error: {e}")
             
 if __name__ == "__main__":

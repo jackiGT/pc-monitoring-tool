@@ -9,7 +9,7 @@ import time
 import threading
 
 class Monitor(object):
-    def __init__(self, name, interval):
+    def __init__(self, name: str, interval: int):
         self.name = name
         self.interval = interval
 
@@ -36,7 +36,7 @@ class Monitor(object):
         return self.interval
     
     # registers function with name and the respective monitor function
-    def register(self, name, func):
+    def register(self, name: str, func):
         self.metrics.append((name, func))
 
     def unregister(self, func):
@@ -58,6 +58,7 @@ class Monitor(object):
         self.running = False
         self.status = "Inactive"
 
+    # Total time monitor ran
     def getUptime(self):
         return time.monotonic() - self.start_time
 
