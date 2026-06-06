@@ -13,7 +13,7 @@ import requests
 from monitor import *
 
 class Agent():
-    def __init__(self, interval=60):
+    def __init__(self, interval=30):
         self.interval = interval # interval of agent payload sent 
         self.deviceId = socket.gethostname() #grabs device ID of host
 
@@ -83,7 +83,7 @@ class Agent():
                 payload = self.collect()
                 r = requests.post('http://127.0.0.1:8000/api/data', json=payload) #prints it for now
                 print(r.status_code)
-                # print(json.dumps(payload, indent=4))
+                # print(json.dumps(payload, indent=4)) # Testing
                 time.sleep(self.interval)
         except KeyboardInterrupt: #ctrl + c
             print("Shutdown intiated.")
